@@ -1,0 +1,21 @@
+{
+  "name": "basics-of-npm",
+  "version": "1.0.0",
+  "description": "Nothing but nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js  && node index.js"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "npm",
+    "express"
+  ],
+  "author": "Tarun Singh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
