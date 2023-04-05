@@ -2,7 +2,7 @@ const express = require("express")
 const fs = require("fs/promises")
 const utils = require("./utils/utils")
 const todoRouter = require("./routes/todos.routes")
-const viewRouter = require("./routes/index")
+const viewRouter = require("./routes/views")
 
 // initialize the express app
 const app = express()
@@ -26,7 +26,7 @@ app.get("/greetings", (req, res) => {
 app.use("/", viewRouter)
 
 // REST APIs
-app.use("/todos", todoRouter)
+app.use("/api/todos", todoRouter)
 
 app.listen(3000, () => {
     console.log("server is running on port 3000")

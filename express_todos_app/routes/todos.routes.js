@@ -24,12 +24,13 @@ todoRouter.post("/", (req, res) => {
             return fs.writeFile("db.json", JSON.stringify(data))
         })
         .then(() => {
-            return res.status(201)
-                .json({
-                    message: "Todo created successfully.",
-                    data: newTodo,
-                    error: null
-                })
+            return res.redirect("index", { title: "Home" })
+            // return res.status(201)
+            //     .json({
+            //         message: "Todo created successfully.",
+            //         data: newTodo,
+            //         error: null
+            //     })
         })
 })
 
