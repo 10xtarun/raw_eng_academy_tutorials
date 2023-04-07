@@ -2,9 +2,13 @@ const express = require("express")
 const fs = require("fs/promises")
 const utils = require("./utils/utils")
 const todoRouter = require("./routes/todos.routes")
+const viewsRouter = require("./routes/views.routes")
 
 // initialize the express app
 const app = express()
+
+// set view engine
+app.set("view engine", "ejs")
 
 // middlewares
 app.use(express.json())
@@ -14,8 +18,11 @@ app.get("/greetings", (req, res) => {
     return res.send("Greetings from Todo App.")
 })
 
-// routers
-app.use("/todos", todoRouter)
+// view routers
+app.use("/", viewsRouter)
+
+// api routers
+app.use("/api/v1/todos", todoRouter)
 
 app.listen(3000, () => {
     console.log("server is running on port 3000")

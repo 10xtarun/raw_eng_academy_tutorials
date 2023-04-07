@@ -12,3 +12,10 @@
     * import neccessary files/modules
     * readData --> "file-path" --> read -> data (string) -> JSON.parse(data) -> Array Object
     * module.exports = { ...object } --> readData
+
+# EJS
+
+basic syntax - <% some code %>
+variable & value - <%= varName %>
+string in syntax - <% "some value" %>
+import syntax - <%- include("path/to/file") %>

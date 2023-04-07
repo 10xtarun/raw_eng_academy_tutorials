@@ -1,0 +1,20 @@
+<%- include("partials/header.ejs") %>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col">
+                <% if(todo) { %>
+                    <h1>
+                        <%= todo.title %>
+                    </h1>
+                    <p>
+                        <%= todo.description %>
+                    </p>
+                    <% } else { %>
+                        <h1>Not Found</h1>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include("partials/footer.ejs") %>
