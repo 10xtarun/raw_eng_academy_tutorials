@@ -1,6 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 const fs = require("fs/promises")
+const { body, validationResult, query, param } = require("express-validator")
 
 const todoRouter = express.Router()
 
@@ -15,26 +16,62 @@ todoRouter.get("/", (req, res) => {
         })
 })
 
-todoRouter.post("/", (req, res) => {
-    const newTodo = req.body
+todoRouter.post(
+    "/",
+    body("title").isString(),
+    body("description").isString(),
+    body("completed").isBoolean(),
+    (req, res) => {
+        const newTodo = req.body
 
-    return utils.readData()
-        .then((data) => {
-            data.push(newTodo)
-            return fs.writeFile("db.json", JSON.stringify(data))
-        })
-        .then(() => {
-            return res.redirect("index", { title: "Home" })
-            // return res.status(201)
-            //     .json({
-            //         message: "Todo created successfully.",
-            //         data: newTodo,
-            //         error: null
-            //     })
-        })
-})
+        return Promise.resolve()
+            .then(() => {
+                const errors = validationResult(req);
+                if (!errors.isEmpty()) {
+                    throw errors.array()
+                }
 
-todoRouter.get("/:title", (req, res) => {
+                return utils.readData()
+            })
+            .then((data) => {
+                data.push(newTodo)
+                return fs.writeFile("db.json", JSON.stringify(data))
+            })
+            .then(() => {
+                return res.status(201)
+                    .json({
+                        message: "Todo created successfully.",
+                        data: newTodo,
+                        error: null
+                    })
+            })
+            .catch((error) => {
+                return res.status(422)
+                    .json({
+                        message: "Todo creation failed.",
+                        data: {},
+                        error: error
+                    })
+            })
+    })
+
+const validate = (validations) => {
+    return (req, res, next) => {
+        return Promise.all(validations.map(validation => validation.run(req)))
+            .then(() => {
+                const errors = validationResult(req)
+                if (errors.isEmpty()) {
+                    return next();
+                }
+                return res.status(400).json({ errors: errors.array() });
+            })
+    }
+}
+
+todoRouter.get(
+    "/:title",
+    validate([ param("title").isString() ]),
+    (req, res) => {
     const title = req.params.title.toLowerCase()
 
     return utils.readData()
@@ -52,7 +89,15 @@ todoRouter.get("/:title", (req, res) => {
         })
 })
 
-todoRouter.put("/:title", (req, res) => {
+todoRouter.put(
+    "/:title",
+    validate([ 
+        param("title").isString(),
+        body("title").isString(),
+        body("description").isString(),
+        body("completed").custom(flag => flag === true || flag === false).withMessage("Should be a boolean value")
+    ]),
+    (req, res) => {
     const title = req.params.title.toLowerCase()
     const updateTodo = req.body
 
