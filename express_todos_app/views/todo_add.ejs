@@ -3,27 +3,24 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col">
-                <h3 class="my-2">Modify Your Todo</h3>
-                <% if(todo) { %>
-                    <form id="todoUpdateForm">
+                <h3 class="my-2">Add a new Todo</h3>
+                    <form id="todoSubmitForm">
                         <div class="mb-3">
                             <label class="form-label" for="title">Enter Title:</label>
-                            <input class="form-control" type="text" name="title" id="title" value="<%=todo.title%>"
+                            <input class="form-control" type="text" name="title" id="title"
                                 placeholder="write something..." />
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="description">Enter Description:</label>
                             <textarea class="form-control" name="description" id="description"
-                                rows="3"><%=todo.description%></textarea>
+                                rows="3" placeholder="write something..."></textarea>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="completedRadio" id="completedDone"
-                                <%=todo.completed ? "checked" : "" %> />
+                            <input class="form-check-input" type="radio" name="completedRadio" id="completedDone"/>
                             <label class="form-check-label" for="completedDone">Mark done</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="completedRadio" id="completedNotDone"
-                                <%=todo.completed ? "" : "checked" %>/>
+                            <input class="form-check-input" type="radio" name="completedRadio" id="completedNotDone" checked/>
                             <label class="form-check-label" for="completedNotDone">Mark undone</label>
                         </div>
                         <div class="text-center" style="width: 100%;">
@@ -31,15 +28,11 @@
                         </div>
                         <hr />
                     </form>
-                    <% } else { %>
-                        <h1>Not Found</h1>
-                        <a href="/todos/add" class="my-1 btn btn-outline-primary">Try adding a new Todo...</a>
-                        <% } %>
             </div>
         </div>
     </div>
     <script>
-        document.getElementById("todoUpdateForm").addEventListener("submit", function (event) {
+        document.getElementById("todoSubmitForm").addEventListener("submit", function (event) {
             event.preventDefault()
 
             const title = document.getElementById("title").value
@@ -53,9 +46,9 @@
             }
 
             fetch(
-                `/api/v1/todos/${title}`,
+                "/api/v1/todos",
                 {
-                    method: "PUT",
+                    method: "POST",
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json"
@@ -64,8 +57,15 @@
                 }
                 )
                 .then((response) => response.json())
-                .then((data) => alert(data.message))
-                .catch((error) => alert(error.toString()))
+                .then((data) => {
+                    if(data.error) {
+                        const errorString = JSON.stringify(data.error)
+                        alert(errorString)
+                    } else {
+                        alert(data.message)
+                    }
+                })
+                .catch((error) => alert(error))
 
 
         })

@@ -3,6 +3,7 @@ const fs = require("fs/promises")
 const utils = require("./utils/utils")
 const todoRouter = require("./routes/todos.routes")
 const viewsRouter = require("./routes/views.routes")
+const middlewares = require("./middlewares/index")
 
 // initialize the express app
 const app = express()
@@ -11,6 +12,7 @@ const app = express()
 app.set("view engine", "ejs")
 
 // middlewares
+app.use(middlewares.logger)
 app.use(express.json())
 
 // hello world API call for our server/app

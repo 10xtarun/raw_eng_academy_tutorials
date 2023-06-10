@@ -1,6 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 const fs = require("fs/promises")
+const { body, validationResult } = require("express-validator")
 
 const todoRouter = express.Router()
 
@@ -15,23 +16,49 @@ todoRouter.get("/", (req, res) => {
         })
 })
 
-todoRouter.post("/", (req, res) => {
-    const newTodo = req.body
+todoRouter.post(
+    "/",
+    body("title").custom((title) => {
+        if (typeof title === "string" && title.length >= 3) {
+            return true
+        }
+        return false
+    }).withMessage("Title should be string and of length greater than 3 or equal"),
+    body("completed").custom((completed) => {
+        if (typeof completed === "boolean") {
+            return true
+        }
+        return false
+    }).withMessage("Completed should be true or false"),
+    (req, res) => {
+        const newTodo = req.body
+        console.log("---body--- ", newTodo)
 
-    return utils.readData()
-        .then((data) => {
-            data.push(newTodo)
-            return fs.writeFile("db.json", JSON.stringify(data))
-        })
-        .then(() => {
-            return res.status(201)
-                .json({
-                    message: "Todo created successfully.",
-                    data: newTodo,
-                    error: null
-                })
-        })
-})
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            console.log("---errors--- ", errors.array())
+
+            return res.status(400).json({
+                message: "Todo creation failed.",
+                error: errors.array(),
+                data: {}
+            })
+        }
+
+        return utils.readData()
+            .then((data) => {
+                data.push(newTodo)
+                return fs.writeFile("db.json", JSON.stringify(data))
+            })
+            .then(() => {
+                return res.status(201)
+                    .json({
+                        message: "Todo created successfully.",
+                        data: newTodo,
+                        error: null
+                    })
+            })
+    })
 
 todoRouter.get("/:title", (req, res) => {
     const title = req.params.title.toLowerCase()

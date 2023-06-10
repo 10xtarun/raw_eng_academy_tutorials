@@ -10,13 +10,16 @@ router.get("", (req, res) => {
         })
 })
 
+router.get("/todos/add", (req, res) => {
+    return res.render("todo_add", { title: "Add" })
+})
+
 router.get("/todos/:title", (req, res) => {
     const title = req.params.title.toLowerCase()
 
     return utils.readData()
         .then((dataArr) => {
             const todo = dataArr.find((element) => (element.title.toLowerCase() === title))
-
             return res.render("todo", { title: "Update", todo })
         })
 })

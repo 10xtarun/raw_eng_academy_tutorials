@@ -1,17 +1,1 @@
-[
-    {
-        "title": "task 2",
-        "description": "task description 2",
-        "completed": true
-    },
-    {
-        "title": "task 1",
-        "description": "task description 1",
-        "completed": false
-    },
-    {
-        "title": "new task",
-        "description": "write some code",
-        "completed": false
-    }
-]
+[{"title":"Some new task","description":"Hello world","completed":false}]
