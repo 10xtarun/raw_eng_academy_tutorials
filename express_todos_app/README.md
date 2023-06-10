@@ -19,3 +19,20 @@ basic syntax - <% some code %>
 variable & value - <%= varName %>
 string in syntax - <% "some value" %>
 import syntax - <%- include("path/to/file") %>
+
+
+Register  -> user_info -> save in database
+
+Register -> user_info -> password (hash & salt) -> hash is saved in db
+
+___
+
+Login -> incoming_info compare with saved_info -> yes login allowed 
+-> no login failed
+
+Login -> incoming_info -> password (plain text) -> compare (with salt) and hash saved in db -> yes or no
+
+___ 
+
+Update /todo (protected)
+

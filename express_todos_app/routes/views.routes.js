@@ -1,5 +1,6 @@
 const express = require("express")
 const utils = require("../utils/utils")
+const { isAuthenticated } = require("../middlewares")
 
 const router = express.Router()
 
@@ -10,7 +11,7 @@ router.get("", (req, res) => {
         })
 })
 
-router.get("/todos/add", (req, res) => {
+router.get("/todos/add",(req, res) => {
     return res.render("todo_add", { title: "Add" })
 })
 
@@ -22,6 +23,14 @@ router.get("/todos/:title", (req, res) => {
             const todo = dataArr.find((element) => (element.title.toLowerCase() === title))
             return res.render("todo", { title: "Update", todo })
         })
+})
+
+router.get("/auth/register", (req, res) => {
+    return res.render("register", { title: "Register" })
+})
+
+router.get("/auth/login", (req, res) => {
+    return res.render("login", { title: "Login" })
 })
 
 module.exports = router

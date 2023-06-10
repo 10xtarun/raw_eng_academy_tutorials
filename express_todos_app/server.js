@@ -2,6 +2,7 @@ const express = require("express")
 const fs = require("fs/promises")
 const utils = require("./utils/utils")
 const todoRouter = require("./routes/todos.routes")
+const authRouter = require("./routes/auth.routes")
 const viewsRouter = require("./routes/views.routes")
 const middlewares = require("./middlewares/index")
 
@@ -25,6 +26,7 @@ app.use("/", viewsRouter)
 
 // api routers
 app.use("/api/v1/todos", todoRouter)
+app.use("/api/v1/auth", authRouter)
 
 app.listen(3000, () => {
     console.log("server is running on port 3000")

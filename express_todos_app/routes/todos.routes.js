@@ -2,6 +2,7 @@ const express = require("express")
 const utils = require("../utils/utils")
 const fs = require("fs/promises")
 const { body, validationResult } = require("express-validator")
+const { isAuthenticated } = require("../middlewares")
 
 const todoRouter = express.Router()
 
@@ -18,6 +19,7 @@ todoRouter.get("/", (req, res) => {
 
 todoRouter.post(
     "/",
+    isAuthenticated,
     body("title").custom((title) => {
         if (typeof title === "string" && title.length >= 3) {
             return true
@@ -56,6 +58,14 @@ todoRouter.post(
                         message: "Todo created successfully.",
                         data: newTodo,
                         error: null
+                    })
+            })
+            .catch((error) => {
+                return res.status(400)
+                    .json({
+                        message: "Todo creation failed.",
+                        data: {},
+                        error: error.message ? error.message : error.toString()
                     })
             })
     })
