@@ -1,12 +1,8 @@
 const express = require("express")
 const utils = require("../utils/utils")
 const fs = require("fs/promises")
-<<<<<<< HEAD
-const { body, validationResult, query, param } = require("express-validator")
-=======
-const { body, validationResult } = require("express-validator")
+const { body, validationResult, param } = require("express-validator")
 const { isAuthenticated } = require("../middlewares")
->>>>>>> 6716948e3e4ab0ec98b58d03c834114af5524611
 
 const todoRouter = express.Router()
 
@@ -23,20 +19,6 @@ todoRouter.get("/", (req, res) => {
 
 todoRouter.post(
     "/",
-<<<<<<< HEAD
-    body("title").isString(),
-    body("description").isString(),
-    body("completed").isBoolean(),
-    (req, res) => {
-        const newTodo = req.body
-
-        return Promise.resolve()
-            .then(() => {
-                const errors = validationResult(req);
-                if (!errors.isEmpty()) {
-                    throw errors.array()
-                }
-=======
     isAuthenticated,
     body("title").custom((title) => {
         if (typeof title === "string" && title.length >= 3) {
@@ -87,31 +69,7 @@ todoRouter.post(
                     })
             })
     })
->>>>>>> 6716948e3e4ab0ec98b58d03c834114af5524611
 
-                return utils.readData()
-            })
-            .then((data) => {
-                data.push(newTodo)
-                return fs.writeFile("db.json", JSON.stringify(data))
-            })
-            .then(() => {
-                return res.status(201)
-                    .json({
-                        message: "Todo created successfully.",
-                        data: newTodo,
-                        error: null
-                    })
-            })
-            .catch((error) => {
-                return res.status(422)
-                    .json({
-                        message: "Todo creation failed.",
-                        data: {},
-                        error: error
-                    })
-            })
-    })
 
 const validate = (validations) => {
     return (req, res, next) => {
