@@ -38,7 +38,7 @@ Update /todo (protected)
 
 
 
-Assignment 4 Objectives:
+Assignment 5 Objectives:
 1. Add isAuthenticated to single GET, UPDATE and DELETE Todo
 2. Covert USER Array to files.json, and store User information in json format (make use of utils).
 3. Use BcryptJS to hash the password and store it.
